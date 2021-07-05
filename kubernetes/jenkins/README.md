@@ -58,6 +58,8 @@ https://jenkins.io/projects/jcasc/
 NOTE: Consider using a custom image with pre-installed plugins
 ```
 
+Check install events:  
+`watch kubectl get events --sort-by=.lastTimestamp -n jenkins`
 
 ### clean all
 ```
