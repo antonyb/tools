@@ -1,49 +1,6 @@
-# Dashboard Intall
+# Dashboard Install
 
-## Dashboard Basic Install
-Downloaded copy of https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
-
-Install dashboard:  
-`kubectl apply -f recommended.yaml`
-
-Run proxy to access it:  
-`kubectl proxy`
-
-NOTE: logging in now would show no data and foebidden access errors as we don't have permission to access currently deployed resources.  
-We need a new Service Account with added permissions.  
-Downloaded from https://github.com/justmeandopensource/kubernetes/blob/master/dashboard/sa_cluster_admin.yaml
-
-`kubectl apply -f sa_cluster_admin.yaml`
-
-Access dashboard on http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
-
-Two login options:
-- token
-- kube config
-
-Log in using the token, stored in a secret linked to the ServiceAccount found in _sa_cluster_admin.yaml_.
-
-`kubectl -n kube-system describe sa dashboard-admin`
-
-```
-Name:                dashboard-admin
-Namespace:           kube-system
-Labels:              <none>
-Annotations:         <none>
-Image pull secrets:  <none>
-Mountable secrets:   dashboard-admin-token-7p6lv
-Tokens:              dashboard-admin-token-7p6lv
-Events:              <none>
-```
-
-Copy the (long) token from the output of:  
-`kubectl -n kube-system describe secret dashboard-admin-token-7p6lv`
-
-Return to the dashboard UI and login.  
-All being well all resources for all namespaces should be available.
-
-At this stage we don't have memory or cpu data.  We need to install the metrics server in the next step.
-
+Install the Metrics Server to make metrics available to the dashboard
 
 # Metrics Server Install
 
@@ -96,6 +53,49 @@ NAME                                         CPU(cores)   MEMORY(bytes)
 dashboard-metrics-scraper-856586f554-sr8j9   0m           5Mi
 kubernetes-dashboard-78c79f97b4-xj7zx        3m           12Mi
 ```
+
+# Dashboard Basic Install
+Downloaded copy of https://raw.githubusercontent.com/kubernetes/dashboard/v2.2.0/aio/deploy/recommended.yaml
+
+Install dashboard:  
+`kubectl apply -f recommended.yaml`
+
+NOTE: logging in now would show no data and foebidden access errors as we don't have permission to access currently deployed resources.  
+We need a new Service Account with added permissions.  
+Downloaded from https://github.com/justmeandopensource/kubernetes/blob/master/dashboard/sa_cluster_admin.yaml
+
+`kubectl apply -f sa_cluster_admin.yaml`
+
+Run proxy to access it:  
+`kubectl proxy`
+
+Access dashboard on http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+Two login options:
+- token
+- kube config
+
+Log in using the token, stored in a secret linked to the ServiceAccount found in _sa_cluster_admin.yaml_.
+
+`kubectl -n kube-system describe sa dashboard-admin`
+
+```
+Name:                dashboard-admin
+Namespace:           kube-system
+Labels:              <none>
+Annotations:         <none>
+Image pull secrets:  <none>
+Mountable secrets:   dashboard-admin-token-7p6lv
+Tokens:              dashboard-admin-token-7p6lv
+Events:              <none>
+```
+
+Copy the (long) token from the output of:  
+`kubectl -n kube-system describe secret dashboard-admin-token-7p6lv`
+
+Return to the dashboard UI and login.  
+All being well all resources for all namespaces should be available, with memory and CPU metrics.
+
 
 # Troubleshooting
 

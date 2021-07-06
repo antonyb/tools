@@ -66,6 +66,14 @@ Check install events:
 kubectl delete namespace jenkins
 ```
 
+## Useful Commands
+
+View deployed release:  
+`helm list -n jenkins`
+
+Export deployed release complete k8s manifest:  
+`helm get manifest jenkins -n jenkins > helm/helm.jenkins.manifest.yaml`
+
 ## Resources
 
 ### Jenkins setup with k8s
